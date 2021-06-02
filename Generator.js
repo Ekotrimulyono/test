@@ -99,52 +99,6 @@ var aesthetic = {
 var my_text = document.getElementById("my_text");
 var aesthetic_text = document.getElementById("aesthetic_text");
 
-// Set pointer-events none as default
-aesthetic_text.style.pointerEvents = "none";
-
-my_text.addEventListener("keyup", function() {
-  aesthetic_text.value = "";
-  var val = this.value;
-  val = val.split("");
-
-  if (my_text.value == "") {
-    aesthetic_text.style.pointerEvents = "none";
-  } else {
-    aesthetic_text.style.pointerEvents = "auto";
-  }
-
-  setTimeout(function() {
-
-    Object.keys(aesthetic).map(function(item) {
-      //Put for loop to convert same letters also
-      for (var j = 0; j < val.length; j++) {
-
-        var i = val.indexOf(item);
-        if (i !== -1) {
-
-          val[i] = aesthetic[item];
-          aesthetic_text.value = val.join(" ");
-
-          // Detect line break
-          if (val.indexOf("\n") !== -1) {
-            aesthetic_text.value = trimIt(val.join(" "))
-          }
-
-        }
-
-      }
-
-    });
-
-  }, 50);
-
-}, false);
-
-// To trim first letter's white space in new line
-function trimIt(x) {
-  return x.replace(/^\s+|\s+$/gm, '');
-}
-
 // trigger copy event on click
 $('#copy').on('click', function(event) {
   console.log(event);
