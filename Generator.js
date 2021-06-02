@@ -145,33 +145,40 @@ function trimIt(x) {
   return x.replace(/^\s+|\s+$/gm, '');
 }
 
-// Focus and blur
-my_text.addEventListener("focus", function() {
-  my_text.style.background = "rgba(144, 60, 94, 0.9)"
-  aesthetic_text.style.background = "rgba(144, 60, 94, 0.9)"
-}, false);
-
-my_text.addEventListener("blur", function() {
-  my_text.style.background = "rgba(144, 60, 94, 0.75)"
-  aesthetic_text.style.background = "rgba(144, 60, 94, 0.75)"
-}, false);
-
-// Trigger on paste
-my_text.addEventListener("paste", function() {
-  my_text.keyup();
-}, false);
-
-// Copy to clipboard
-var clipboard = new Clipboard('#aesthetic_text');
-clipboard.on('success', function(e) {
-
-  document.querySelector(".tooltip").classList.add("copied");
-  aesthetic_text.style.pointerEvents = "none";
-
-  setTimeout(function() {
-    document.querySelector(".tooltip").classList.remove("copied");
-    e.clearSelection();
-    aesthetic_text.style.pointerEvents = "auto";
-  }, 1500);
-
+// trigger copy event on click
+$('#copy').on('click', function(event) {
+  console.log(event);
+  copyToClipboard(event);
 });
+
+// event handler
+function copyToClipboard(e) {
+  // alert('this function was triggered');
+  // find target element
+  var
+    t = e.target, 
+    c = t.dataset.copytarget,
+    inp = (c ? document.querySelector(c) : null);
+  console.log(inp);
+  // check if input element exist and if it's selectable
+  if (inp && inp.select) {
+    // select text
+    inp.select();
+    try {
+      // copy text
+      document.execCommand('copy');
+      inp.blur();
+
+      // copied animation
+      t.classList.add('copied');
+      setTimeout(function() {
+        t.classList.remove('copied');
+      }, 1500);
+    } catch (err) {
+      //fallback in case exexCommand doesnt work
+      alert('please press Ctrl/Cmd+C to copy');
+    }
+
+  }
+
+}
